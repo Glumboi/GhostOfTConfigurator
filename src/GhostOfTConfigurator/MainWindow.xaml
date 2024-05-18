@@ -1,5 +1,5 @@
-﻿<Window
-    Height="450"
+﻿<ui:FluentWindow
+    Height="600"
     Title="GoT-AdvancedConfigurator (Made by Glumboi/Glummy)"
     Width="800"
     mc:Ignorable="d"
@@ -8,51 +8,75 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:GhostOfTConfigurator"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Border>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.25*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="0.2*" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="0.10*" />
             </Grid.RowDefinitions>
-            <Image Source="images/banner.jpg" Stretch="UniformToFill" />
-            <Border Grid.Row="1" Padding="10">
+
+            <Image
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                HorizontalAlignment="Stretch"
+                MouseDown="Banner_MouseDown"
+                RenderOptions.BitmapScalingMode="HighQuality"
+                Source="images/banner.jpg"
+                Stretch="UniformToFill" />
+            <ui:TitleBar />
+            <Border Grid.Row="2" Padding="10">
                 <Grid>
                     <ScrollViewer>
                         <StackPanel Name="Settings_Panel" />
                     </ScrollViewer>
                 </Grid>
             </Border>
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Button
-                    Click="SaveButton_OnClick"
-                    HorizontalAlignment="Stretch"
-                    Name="SaveButton">
-                    Save settings
-                </Button>
+            <Border Grid.Row="3" Padding="4">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+                    <ui:Button
+                        Click="SaveButton_OnClick"
+                        HorizontalAlignment="Stretch"
+                        Margin="0,0,4,0"
+                        Name="SaveButton">
+                        <ui:Button.Icon>
+                            <ui:SymbolIcon Symbol="Save24" />
+                        </ui:Button.Icon>
+                        Save settings
+                    </ui:Button>
 
-                <Button
-                    Click="SaveConfigButton_OnClick"
-                    Grid.Column="1"
-                    HorizontalAlignment="Stretch"
-                    Name="SaveConfigButton">
-                    Save as file
-                </Button>
+                    <ui:Button
+                        Click="SaveConfigButton_OnClick"
+                        Grid.Column="1"
+                        HorizontalAlignment="Stretch"
+                        Margin="0,0,4,0"
+                        Name="SaveConfigButton">
+                        <ui:Button.Icon>
+                            <ui:SymbolIcon Symbol="Save24" />
+                        </ui:Button.Icon>
+                        Save as file
+                    </ui:Button>
 
-                <Button
-                    Click="LoadButton_OnClick"
-                    Grid.Column="2"
-                    HorizontalAlignment="Stretch"
-                    Name="LoadButton">
-                    Load from file
-                </Button>
-            </Grid>
+                    <ui:Button
+                        Click="LoadButton_OnClick"
+                        Grid.Column="2"
+                        HorizontalAlignment="Stretch"
+                        Name="LoadButton">
+                        <ui:Button.Icon>
+                            <ui:SymbolIcon Symbol="ArrowClockwise24" />
+                        </ui:Button.Icon>
+                        Load from file
+                    </ui:Button>
+                </Grid>
+            </Border>
         </Grid>
     </Border>
-</Window>
+</ui:FluentWindow>

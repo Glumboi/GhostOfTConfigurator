@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -11,21 +10,27 @@ using System.Windows.Media.TextFormatting;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using Wpf.Ui.Controls;
+using MessageBox = System.Windows.MessageBox;
+using MessageBoxButton = System.Windows.MessageBoxButton;
+using TextBox = System.Windows.Controls.TextBox;
 
 namespace GhostOfTConfigurator;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : Window
+public partial class MainWindow : FluentWindow
 {
     private const string settingsLoc =
         "Software\\Sucker Punch Productions\\Ghost of Tsushima DIRECTOR'S CUT\\Graphics";
 
+    private bool mouseDown;
+    private Point lastLocation;
+
     public MainWindow()
     {
         InitializeComponent();
-
         var key = Registry.CurrentUser.OpenSubKey(settingsLoc);
         if (key != null)
         {
@@ -33,10 +38,14 @@ public partial class MainWindow : Window
             values.Sort();
             foreach (var val in values)
             {
-                this.Settings_Panel.Children.Add(new TextBox()
+                var tb = new Wpf.Ui.Controls.TextBox()
                 {
                     Text = $"{val} = {key.GetValue(val)}",
-                });
+                    Margin = new Thickness(0, 2, 0, 2),
+                    PlaceholderText = val
+                };
+
+                this.Settings_Panel.Children.Add(tb);
             }
 
             return;
@@ -80,21 +89,30 @@ public partial class MainWindow : Window
         RegReadErr();
     }
 
-    void RegReadErr()
+    async void RegReadErr()
     {
-        MessageBox.Show(
-            "Cannot read registry, perhaps admin privileges are required!\nThe App will close after clicking OK!",
-            "Error", MessageBoxButton.OK,
-            MessageBoxImage.Error);
+        Wpf.Ui.Controls.MessageBox msgBox = new Wpf.Ui.Controls.MessageBox();
+        msgBox.Title = "Error";
+        msgBox.Content =
+            "Cannot read registry, perhaps admin privileges are required!\nThe App will close after clicking OK!";
+        msgBox.CloseButtonText = "OK";
+        msgBox.CloseButtonAppearance = ControlAppearance.Primary;
+        await msgBox.ShowDialogAsync();
         Environment.Exit(-1);
     }
 
-    void AllGoodMessage()
+    async void AllGoodMessage()
     {
-        MessageBox.Show("Saved settings!", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+        Wpf.Ui.Controls.MessageBox msgBox = new Wpf.Ui.Controls.MessageBox();
+        msgBox.Title = "Info";
+        msgBox.Content =
+            "Saved settings!";
+        msgBox.CloseButtonText = "OK";
+        msgBox.CloseButtonAppearance = ControlAppearance.Primary;
+        await msgBox.ShowDialogAsync();
     }
 
-    private void SaveConfigButton_OnClick(object sender, RoutedEventArgs e)
+    private async void SaveConfigButton_OnClick(object sender, RoutedEventArgs e)
     {
         SaveFileDialog saveFileDialog = new SaveFileDialog();
         saveFileDialog.Title = "Save current registry snapshot as file...";
@@ -109,11 +127,18 @@ public partial class MainWindow : Window
             }
 
             File.WriteAllLines(saveFileDialog.FileName, content);
-            MessageBox.Show("Saved settings to file!", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            Wpf.Ui.Controls.MessageBox msgBox = new Wpf.Ui.Controls.MessageBox();
+            msgBox.Title = "Info";
+            msgBox.Content =
+                $"Saved settings to file: {saveFileDialog.FileName}!";
+            msgBox.CloseButtonText = "OK";
+            msgBox.CloseButtonAppearance = ControlAppearance.Primary;
+            await msgBox.ShowDialogAsync();
         }
     }
 
-    private void LoadButton_OnClick(object sender, RoutedEventArgs e)
+    private async void LoadButton_OnClick(object sender, RoutedEventArgs e)
     {
         OpenFileDialog openFileDialog = new OpenFileDialog();
         openFileDialog.Title = "Open settings file...";
@@ -129,8 +154,20 @@ public partial class MainWindow : Window
                 });
             }
 
-            MessageBox.Show($"Loaded settings from file: {openFileDialog.FileName}!", "Info", MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            Wpf.Ui.Controls.MessageBox msgBox = new Wpf.Ui.Controls.MessageBox();
+            msgBox.Title = "Info";
+            msgBox.Content =
+                $"Loaded settings from file: {openFileDialog.FileName}!";
+            msgBox.CloseButtonText = "OK";
+            msgBox.CloseButtonAppearance = ControlAppearance.Primary;
+            await msgBox.ShowDialogAsync();
         }
+    }
+
+
+    private void Banner_MouseDown(object sender, MouseButtonEventArgs e)
+    {
+        if (e.ChangedButton == MouseButton.Left)
+            DragMove();
     }
 }

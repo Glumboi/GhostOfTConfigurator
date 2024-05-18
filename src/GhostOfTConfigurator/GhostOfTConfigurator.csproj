@@ -8,8 +8,8 @@
         <UseWPF>true</UseWPF>
         <ApplicationIcon>icon.ico</ApplicationIcon>
         <Authors>Glummy</Authors>
-        <AssemblyVersion>1.0.0.0</AssemblyVersion>
-        <FileVersion>1.0.0.0</FileVersion>
+        <AssemblyVersion>1.1.0.0</AssemblyVersion>
+        <FileVersion>1.1.0.0</FileVersion>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,7 +17,14 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Remove="images\icon.jpg" />
+      <Resource Include="images\icon.jpg" />
+      <None Remove="images\banner.jpg" />
       <Resource Include="images\banner.jpg" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="WPF-UI" Version="3.0.4" />
     </ItemGroup>
 
 </Project>
